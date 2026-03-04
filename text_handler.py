@@ -10,8 +10,8 @@ with open(f"{file_input}", 'r', encoding='utf-8') as text_file:
         elif 97 <= ord(elem) <= 122:
             text = text.replace(elem, chr(ord(elem) - 32))
     for err in temp:
-        text = text.replace(err, ' ')
-    text = text.split()
+        text = text.replace(err, '*')
+    text = text.split('*')
     text = ''.join(text)
     print(text)
 
