@@ -11,11 +11,18 @@ def affine(alphabet, text, key, type_e_d='e'):
     else:
         return f"Пожалуйста, введите обратимый по модулю {m} параметр 'a' в ключе, запустив программу заново."
     for elem in text:
-        ind = ord(elem) - ord(alphabet[0])
-        if type_e_d == 'e':
-            output += alphabet[(a * ind + b) % m]
-        elif type_e_d == 'd':
-            output += alphabet[((ind - b) * a_inv) % m]
+        if (65 <= ord(elem) <= 90) or (elem == ' '):
+            if elem == ' ':
+                output += elem
+            else:
+                ind = ord(elem) - ord(alphabet[0])
+                if type_e_d == 'e':
+                    output += alphabet[(a * ind + b) % m]
+                elif type_e_d == 'd':
+                    output += alphabet[((ind - b) * a_inv) % m]
+                else:
+                    output = "Пожалуйста, выберите режим зашифрования или расшифрования, перезапустив программу."
+                    break
         else:
             output = "Пожалуйста, в качестве обрабатываемого текста введите последовательность латинских символов заглавными буквами."
             break
