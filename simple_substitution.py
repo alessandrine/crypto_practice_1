@@ -1,12 +1,19 @@
 def simple_substitution(alphabet, text, key, type_e_d='e'):
     output = ""
     for elem in text:
-        if type_e_d == 'e':
-            output += key[ord(elem) - ord(alphabet[0])]
-        elif type_e_d == 'd':
-            output += alphabet[key.index(elem)]
+        if (65 <= ord(elem) <= 90) or (elem == ' '):
+            if elem == ' ':
+                output += elem
+            else:
+                if type_e_d == 'e':
+                    output += key[ord(elem) - ord(alphabet[0])]
+                elif type_e_d == 'd':
+                    output += alphabet[key.index(elem)]
+                else:
+                    output = "Пожалуйста, выберите режим зашифрования или расшифрования, перезапустив программу."
+                    break
         else:
-            output = "Пожалуйста, в качестве обрабатываемого текста введите последовательность латинских символов заглавными буквами."
+            output = "Пожалуйста, в качестве обрабатываемого текста введите последовательность латинских символов заглавными буквами.\nРазделителем слов может служить только пробел."
             break
     return output
 
