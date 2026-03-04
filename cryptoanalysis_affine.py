@@ -16,14 +16,21 @@ dec_1 = ord('E') - ord('A') # for getting indexes in the alphabet
 dec_2 = ord('T') - ord('A')
 a = ((enc_1 - enc_2) * pow((dec_1 - dec_2), -1, 26)) % 26
 b = (enc_1 - (a * dec_1)) % 26
-print(f"Полученные a, b равны {a, b} соотвественно")
+print(f"Полученные a, b равны {a, b} соответственно")
 '''============== ПОПЫТКА РАСШИФРОВАНИЯ (КЛЮЧ УЗНАЛИ) ==================='''
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 a_inv = pow(a, -1, 26)
 decr_message = ''
 for elem in ciphertext:
-    ind = ord(elem) - ord('A')
-    decr_message += alphabet[((ind - b) * a_inv) % 26]
+    if elem == ' ':
+        decr_message += elem
+    elif 65 <= ord(elem) <= 90:
+        ind = ord(elem) - ord('A')
+        decr_message += alphabet[((ind - b) * a_inv) % 26]
+    # На всякий случай добавим проверку на "дурака", рассчитывая, что код для криптоанализа универсален для любого шифртекста с аффинным шифром
+    else:
+        print("Введённый шифртекст некорректен, он содержит символы кроме латинского алфавита и пробелов.")
+        break
 print(decr_message)
 name_decr_file = input("Файл для записи дешифрованного варианта текста: ")
 with open(f"{name_decr_file}", 'w') as decr_file:
