@@ -18,35 +18,41 @@ def affine(alphabet, text, key1, key2, type_e_d='e'):
     a_second = a_first = 0
     b_second = b_first = 0
     for elem in text:
-        cnt += 1
-        if cnt == 1:
-            a = a_second = a1
-            b = b_second = b1
-            a_inv = a_inv_second = a1_inv
-        elif cnt == 2:
-            a = a_first = a2
-            b = b_first = b2
-            a_inv = a_inv_first = a2_inv
-        else:
-            a = (a_second * a_first) % m
-            b = (b_second + b_first) % m
-            a_inv = (a_inv_second * a_inv_first) % m
+        if elem == ' ':
+            output += elem
+        if 65 <= ord(elem) <= 90:
+            cnt += 1
+            if cnt == 1:
+                a = a_second = a1
+                b = b_second = b1
+                a_inv = a_inv_second = a1_inv
+            elif cnt == 2:
+                a = a_first = a2
+                b = b_first = b2
+                a_inv = a_inv_first = a2_inv
+            else:
+                a = (a_second * a_first) % m
+                b = (b_second + b_first) % m
+                a_inv = (a_inv_second * a_inv_first) % m
 
-        ind = ord(elem) - ord(alphabet[0])
-        if type_e_d == 'e':
-            output += alphabet[(a * ind + b) % m]
-        elif type_e_d == 'd':
-            output += alphabet[((ind - b) * a_inv) % m]
+            ind = ord(elem) - ord(alphabet[0])
+            if type_e_d == 'e':
+                output += alphabet[(a * ind + b) % m]
+            elif type_e_d == 'd':
+                output += alphabet[((ind - b) * a_inv) % m]
+            else:
+                output = "Пожалуйста, выберите режим зашифрования или расшифрования, перезапустив программу."
+                break
+            if cnt > 2:
+                a_second = a_first
+                b_second = b_first
+                a_first = a
+                b_first = b
+                a_inv_second = a_inv_first
+                a_inv_first = a_inv
         else:
             output = "Пожалуйста, в качестве обрабатываемого текста введите последовательность латинских символов заглавными буквами."
             break
-        if cnt > 2:
-            a_second = a_first
-            b_second = b_first
-            a_first = a
-            b_first = b
-            a_inv_second = a_inv_first
-            a_inv_first = a_inv
     return output
 
 
