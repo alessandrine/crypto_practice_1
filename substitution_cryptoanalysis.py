@@ -20,6 +20,14 @@ def pattern_word_sample(num, d):
             out_d.setdefault(pair[0], pair[-1])
     return out_d
 
+def is_group_contain(group, substring):
+    flag = 0
+    for word in group:
+        if word.count(substring) > 0:
+            flag = 1
+            break
+    return flag
+
 
 with open(f"{name_file_cipher}", 'r', encoding='utf-8') as file_cipher:
     ciphertext = file_cipher.readline()
@@ -102,20 +110,40 @@ word_pred = dict()
 for pat_1 in one_word_grouped_pat_ciph.keys():
     if pat_1 in one_word_grouped_pat_lang.keys():
         word_pred.setdefault(one_word_grouped_pat_ciph[pat_1][0], one_word_grouped_pat_lang[pat_1][0])
-print("Словарь предположений по словам:", *list(word_pred.items()), sep='\n')
+# Вспомогательный print для визуального анализа:
+# print("Словарь предположений по словам:", *list(word_pred.items()), sep='\n')
 
 # Перенос в словарь предположений по буквам
 for pair in word_pred.items():
     key = pair[0]
     value = pair[1]
     for ind in range(len(key)):
-        if (key[ind] not in 'OQITZ') and (value[ind] not in 'ETAIH'):
+        if (key[ind] not in 'OQITZLNMPCS') and (value[ind] not in 'ETAIHSYZJVL'): # новые предположения по исключениям дополняются за счёт предположений в ручном режиме ниже
             if value[ind] not in pred_dict[key[ind]]:
                 pred_dict[key[ind]].append(value[ind])
 
 # Новые предположения по окончаниям слов: -S, -Y
 pred_dict['L'] = ['S']
 pred_dict['N'] = ['Y']
+# Ещё предположения на основе частотного анализа:
+pred_dict['M'] = ['Z']
+pred_dict['P'] = ['J'] # 4-я с конца, резки скачок от 12 до 26 раз в шифртексте
+pred_dict['C'] = ['V'] # скачок от 26 до 160 повторений
+pred_dict['S'] = ['L'] # скачок от 565 до 903 (16-я с конца)
+# Редкие буквы (неточно):
+pred_dict['B'] = ['X', 'Q']
+pred_dict['J'] = ['X', 'Q']
+
+# Сузим круг паттернов языка до паттернов, встретившихся в шифртексте
+new_grouped_pat_lang = []
+for key in grouped_pat_ciph.keys():
+    if key in grouped_pat_lang.keys():
+        new_grouped_pat_lang.append([grouped_pat_ciph[key], grouped_pat_lang[key]])
+# print("Новый словарь сопоставлений (тех, которые встретились в шифртексте):\n", new_grouped_pat_lang)
+
+# Поиск QU в языке
+qu_new_grouped_pat_lang = [pair for pair in new_grouped_pat_lang if is_group_contain(pair[-1], 'QU')]
+print("Встретилось QU в языке:", *qu_new_grouped_pat_lang, sep='\n\n')
 print("Словарь предположений: ", pred_dict)
 
 # '''================= ПОПЫТКА СОПОСТАВЛЕНИЯ ==================='''
