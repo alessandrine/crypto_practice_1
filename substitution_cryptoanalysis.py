@@ -102,6 +102,7 @@ word_pred = dict()
 for pat_1 in one_word_grouped_pat_ciph.keys():
     if pat_1 in one_word_grouped_pat_lang.keys():
         word_pred.setdefault(one_word_grouped_pat_ciph[pat_1][0], one_word_grouped_pat_lang[pat_1][0])
+print("Словарь предположений по словам:", *list(word_pred.items()), sep='\n')
 
 # Перенос в словарь предположений по буквам
 for pair in word_pred.items():
@@ -112,6 +113,9 @@ for pair in word_pred.items():
             if value[ind] not in pred_dict[key[ind]]:
                 pred_dict[key[ind]].append(value[ind])
 
+# Новые предположения по окончаниям слов: -S, -Y
+pred_dict['L'] = ['S']
+pred_dict['N'] = ['Y']
 print("Словарь предположений: ", pred_dict)
 
 # '''================= ПОПЫТКА СОПОСТАВЛЕНИЯ ==================='''
