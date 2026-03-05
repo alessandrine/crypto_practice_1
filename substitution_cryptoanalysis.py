@@ -1,6 +1,19 @@
 # name_file_cipher = input("Файл с шифртекстом: ")
 name_file_cipher = 'ciphertext-2.txt'
 
+def word_pattern(word):
+    pattern = []
+    pat_dict = dict()
+    k = 0
+    for let in word:
+        if let not in list(pat_dict.keys()):
+            pat_dict.setdefault(let, k)
+            k += 1
+    for let in word:
+        pattern.append(str(pat_dict[let]))
+    return '.'.join(pattern)
+
+
 with open(f"{name_file_cipher}", 'r', encoding='utf-8') as file_cipher:
     ciphertext = file_cipher.readline()
 '''============== СЛОВА В ШИФРТЕКСТЕ ===================='''
@@ -44,7 +57,25 @@ pred_dict['I'].append('H')
 pred_dict['Q'] = ['A']
 pred_dict['O'] = ['I']
 
+# Словарь из книги CrackingCodes
+with open("dictionary_al_swiergat.txt", 'r') as words_lang_file:
+    words_lang = []
+    for word in words_lang_file:
+        words_lang.append(word.strip())
 
+print("THI* (dict): ", [word for word in words_lang if (word[0:3] == 'THI') and (len(word) == 4)]) # THIN THIS
+pred_dict['L'] = ['N', 'S']
+
+'''=================== РАБОТА С ПАТТЕРНАМИ СЛОВ В СЛОВАРЕ ЯЗЫКА ===================='''
+w_with_pat_lang = []
+for word in words_lang:
+    w_with_pat_lang.append([word_pattern(word), word])
+grouped_pat_lang = dict()
+set_keys_pat_lang = set([x[0] for x in w_with_pat_lang])
+for pat in set_keys_pat_lang:
+    grouped_pat_lang.setdefault(pat, [])
+for pair in w_with_pat_lang:
+    grouped_pat_lang[pair[0]].append(pair[-1])
 
 print("Словарь предположений: ", pred_dict)
 
