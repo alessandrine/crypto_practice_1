@@ -118,7 +118,7 @@ for pair in word_pred.items():
     key = pair[0]
     value = pair[1]
     for ind in range(len(key)):
-        if (key[ind] not in 'OQITZLNMPCS') and (value[ind] not in 'ETAIHSYZJVL'): # новые предположения по исключениям дополняются за счёт предположений в ручном режиме ниже
+        if (key[ind] not in 'OQITZLNMPCSBJ') and (value[ind] not in 'ETAIHSYZJVLXQ'): # новые предположения по исключениям дополняются за счёт предположений в ручном режиме ниже
             if value[ind] not in pred_dict[key[ind]]:
                 pred_dict[key[ind]].append(value[ind])
 
@@ -143,8 +143,23 @@ for key in grouped_pat_ciph.keys():
 
 # Поиск QU в языке
 qu_new_grouped_pat_lang = [pair for pair in new_grouped_pat_lang if is_group_contain(pair[-1], 'QU')]
-print("Встретилось QU в языке:", *qu_new_grouped_pat_lang, sep='\n\n')
+# Можно было бы использовать для визуального анализа, но было выдвинуто более быстрое предположение на основе частотности
+# print("Встретилось QU в языке:", *qu_new_grouped_pat_lang, sep='\n\n')
+
+'''=================== ПЕЧАТЬ СЛОВАРЯ ПРЕДПОЛОЖЕНИЙ ПО БУКВАМ ====================='''
 print("Словарь предположений: ", pred_dict)
+'''===================== ПЕРЕБОР ("УМНЫЙ") ========================='''
+# Умный перебор по составленному словарю (визуально отметили, что он заполнен для всех букв)
+# reversed_pred_dict = dict()
+# for elem in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+#     reversed_pred_dict.setdefault(elem, [])
+# for pair
+pred_key_str = "_"*26
+for pair in pred_dict.items():
+    if len(pair[-1]) == 1:
+        ind = ord(pair[-1][0]) - ord('A')
+        pred_key_str = pred_key_str[:ind] + pair[0] + pred_key_str[ind+1:]
+print(pred_key_str)
 
 # '''================= ПОПЫТКА СОПОСТАВЛЕНИЯ ==================='''
 # out_dict = dict()
