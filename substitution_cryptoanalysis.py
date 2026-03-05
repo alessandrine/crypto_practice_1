@@ -13,6 +13,13 @@ def word_pattern(word):
         pattern.append(str(pat_dict[let]))
     return '.'.join(pattern)
 
+def pattern_word_sample(num, d):
+    out_d = dict()
+    for pair in d.items():
+        if len(pair[-1]) == num:
+            out_d.setdefault(pair[0], pair[-1])
+    return out_d
+
 
 with open(f"{name_file_cipher}", 'r', encoding='utf-8') as file_cipher:
     ciphertext = file_cipher.readline()
@@ -76,6 +83,34 @@ for pat in set_keys_pat_lang:
     grouped_pat_lang.setdefault(pat, [])
 for pair in w_with_pat_lang:
     grouped_pat_lang[pair[0]].append(pair[-1])
+'''=================== РАБОТА С ПАТТЕРНАМИ СЛОВ В ШИФРТЕКСТЕ ===================='''
+w_with_pat_ciph = []
+for word in cipher_list:
+    w_with_pat_ciph.append([word_pattern(word), word])
+grouped_pat_ciph = dict()
+set_keys_pat_ciph = set([x[0] for x in w_with_pat_ciph])
+for pat in set_keys_pat_ciph:
+    grouped_pat_ciph.setdefault(pat, [])
+for pair in w_with_pat_ciph:
+    grouped_pat_ciph[pair[0]].append(pair[-1])
+
+# Сделаем выборку из паттернов с 1 подходящим словом
+one_word_grouped_pat_lang = pattern_word_sample(1, grouped_pat_lang)
+one_word_grouped_pat_ciph = pattern_word_sample(1, grouped_pat_ciph)
+# Словарь предположений, но уже по сопоставлению слов
+word_pred = dict()
+for pat_1 in one_word_grouped_pat_ciph.keys():
+    if pat_1 in one_word_grouped_pat_lang.keys():
+        word_pred.setdefault(one_word_grouped_pat_ciph[pat_1][0], one_word_grouped_pat_lang[pat_1][0])
+
+# Перенос в словарь предположений по буквам
+for pair in word_pred.items():
+    key = pair[0]
+    value = pair[1]
+    for ind in range(len(key)):
+        if (key[ind] not in 'OQITZ') and (value[ind] not in 'ETAIH'):
+            if value[ind] not in pred_dict[key[ind]]:
+                pred_dict[key[ind]].append(value[ind])
 
 print("Словарь предположений: ", pred_dict)
 
