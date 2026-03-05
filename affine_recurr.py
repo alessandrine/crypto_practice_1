@@ -20,7 +20,7 @@ def affine(alphabet, text, key1, key2, type_e_d='e'):
     for elem in text:
         if elem == ' ':
             output += elem
-        if 65 <= ord(elem) <= 90:
+        elif 65 <= ord(elem) <= 90:
             cnt += 1
             if cnt == 1:
                 a = a_second = a1

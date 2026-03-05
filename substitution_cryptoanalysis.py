@@ -160,22 +160,3 @@ for pair in pred_dict.items():
         ind = ord(pair[-1][0]) - ord('A')
         pred_key_str = pred_key_str[:ind] + pair[0] + pred_key_str[ind+1:]
 print(pred_key_str)
-
-# '''================= ПОПЫТКА СОПОСТАВЛЕНИЯ ==================='''
-# out_dict = dict()
-# cnt = 0
-# for element in list(freq_dict_sorted.keys()):
-#     out_dict.setdefault(freq_dict_sorted_lang_keys[cnt], element)
-#     cnt += 1
-# print(out_dict)
-
-# predict_key = ""
-# alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-# for symb in alphabet:
-#     predict_key += out_dict[symb]
-# print(predict_key)
-#
-# output = ""
-# for elem in text_analysis:
-#     output += alphabet[predict_key.index(elem)]
-# print(output)
